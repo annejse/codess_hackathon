@@ -2,6 +2,7 @@
     "name": "South Europe",
     "initialZoom": 9,
     "initialPosition": { "x":420, "y": 90},
+    "startingLevel": 2,
     "cities": {
         "Madrid": {
             "name": "Madrid",

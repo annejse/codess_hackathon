@@ -13,6 +13,16 @@ var gameEngine = {
     diseaseQuestions: null,
     researchInformation: null,
 
+    drawMap: function (map, done) {
+        worldmap.draw(map.initialZoom, map.initialPosition, function () {
+            gameEngine.infect(map.startingLevel);
+            gameEngine.drawConnections();
+            gameEngine.drawCities();
+            done();
+        });
+    },
+
+
     /**
      * Creates a new game
      */
@@ -32,20 +42,16 @@ var gameEngine = {
                 $('#treatCity').prop( "disabled", false );
                 $('#research').prop( "disabled", false );
 
-                worldmap.draw(map.initialZoom, map.initialPosition, function() {
-                    $.each(map.cities, function (name, city) {
-                        city.players = [];
-                    });
-                    gameEngine.drawConnections();
-                    gameEngine.drawCities();
-                    done();
+                $.each(map.cities, function (name, city) {
+                    city.players = [];
+                    city.infection = 0;
                 });
+
+                gameEngine.drawMap(map, done);
             });
         });
-        
-
-
     },
+
 
     /**
      * Adds a player
@@ -93,6 +99,16 @@ var gameEngine = {
 
     },
 
+    infect: function(level) {
+        level = level === undefined ? this.map.startingLevel - 1 : level;
+        var map = this.map;
+        for (var i = 0; i < map.startingLevel; i++) {
+            var city = map.citiesList[chance.integer({min: 0, max: map.nCities - 1})];
+            city.infection++;
+            worldmap.drawCity(city.coordinates, city.name, city.infection, true);
+        }
+    },
+
     movePlayer: function(player, src, dest) {
         if (src !== null) {
             for (var i = 0; i < src.players.length; src++) {
@@ -121,7 +137,7 @@ var gameEngine = {
 
     drawCities: function() {
         $.each(this.map.cities, function (name, city) {
-            worldmap.drawCity(city.coordinates, name);
+            worldmap.drawCity(city.coordinates, name, city.infection);
         });
     },
 
@@ -149,7 +165,10 @@ var gameEngine = {
     nextTurn: function() {
         var nextPlayer = (this.currentPlayer.id + 1) % this.nPlayers;
         this.setCurrentPlayer(this.players[nextPlayer]);
-        
+        this.drawMap(this.map, function() {
+            this.infect();
+        });
+
     },
 
 

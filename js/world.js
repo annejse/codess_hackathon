@@ -400,16 +400,30 @@ var worldmap = {
 
         });
     },
-    drawCity: function(coordinates, name) {
+    drawCity: function(coordinates, name, infection, animate) {
         var attr = this.world.parseLatLon(coordinates),
-            dot = this.r.circle().attr({fill: "r#FE7727:50-#F57124:100", stroke: "#fff", "stroke-width": 2, r: 0}),
+            isAnimated = animate === undefined ? false : true,
+            dot = this.r.circle().attr({fill: "r#FE7727:50-#F57124:100", stroke: "#fff", "stroke-width": 2, r: isAnimated ? 0 :1}),
             label;
-        attr.r = 0;
-        dot.stop().attr(attr).animate({r: 1}, 1000, "elastic");
+        if (animate) {
+            attr.r = 0;
+            dot.stop().attr(attr).animate({r: 1}, 1000, "elastic");
+        } {
+            dot.stop().attr(attr);
+        }
         label = this.r.text(attr.cx, attr.cy, name);
         label.attr({'font-size': 2, 'font-family': 'Verdana'});
         label.onclick = function () {
             console.log("EO");
+        };
+        for (var level = 0; level < infection; level++) {
+            this.r.circle().attr({
+                cx: attr.cx + level * 1.3,
+                cy: attr.cy - 2.2,
+                fill: "#800080",
+                stroke: "#fff",
+                "stroke-width": 1,
+                r: 0.6});
         }
     },
     drawPlayer: function(coordinates, name, offset) {
