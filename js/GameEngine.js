@@ -12,10 +12,10 @@ var gameEngine = {
     nPlayers: 0,
     diseaseQuestions: null,
     researchInformation: null,
+    messages: [],
 
     drawMap: function (map, done) {
         worldmap.draw(map.initialZoom, map.initialPosition, function () {
-            gameEngine.infect(map.startingLevel);
             gameEngine.drawConnections();
             gameEngine.drawCities();
             for (var i = 0; i < gameEngine.nPlayers; i++) {
@@ -49,9 +49,12 @@ var gameEngine = {
                 $.each(map.cities, function (name, city) {
                     city.players = [];
                     city.infection = 0;
+                    city.outbreaked = false;
                 });
-
-                gameEngine.drawMap(map, done);
+                gameEngine.infect(map.startingLevel);
+                gameEngine.drawMap(map, function() {
+                    done();
+                });
             });
         });
     },
@@ -106,11 +109,33 @@ var gameEngine = {
     infect: function(level) {
         level = level === undefined ? this.map.startingLevel - 1 : level;
         var map = this.map;
-        for (var i = 0; i < map.startingLevel; i++) {
-            var city = map.citiesList[chance.integer({min: 0, max: map.nCities - 1})];
-            city.infection++;
-            worldmap.drawCity(city.coordinates, city.name, city.infection, true);
+
+        for (var i = 0; i < level; i++) {
+            gameEngine.infectCity(map.citiesList[chance.integer({min: 0, max: map.nCities - 1})]);
+
         }
+    },
+
+    infectCity: function(city) {
+
+        if (city.outbreaked) {
+            return;
+        }
+        if (city.infection === 3 && !city.outbreaked) {
+            $("#alert-box").text(city.name + " has an outbreak!!!");
+            gameEngine.outbreak(city);
+        } else {
+            city.infection++;
+        }
+        $("#alert-box").text(city.name + " is been infected!!!");
+    },
+
+    outbreak: function(city) {
+        var map = this.map;
+        city.outbreaked = true;
+        for (var i = 0; i < city.connections.length; i++) {
+            gameEngine.infect(map.cities[city.connections[i]]);
+        };
     },
 
     movePlayer: function(player, src, dest) {
@@ -180,8 +205,9 @@ var gameEngine = {
     nextTurn: function() {
         var nextPlayer = (this.currentPlayer.id + 1) % this.nPlayers;
         this.setCurrentPlayer(this.players[nextPlayer]);
+        gameEngine.infect();
         this.drawMap(this.map, function() {
-            this.infect();
+
         });
 
     },
@@ -212,39 +238,48 @@ var gameEngine = {
 
         $('#generic-modal .container').append("<div id='submitAnswer' class='btn btn-primary'>Submit</div>")
         $('#submitAnswer').click(this.submitAnswer);
+        $('#submitAnswer').data("city", gameEngine.currentPlayer.city);
+        $('#submitAnswer').data("action", 'treat');
         
 
         $('#generic-modal').modal()
     },
 
     submitAnswer: function() {
-        answer = $('#generic-modal input[name=question]:checked').val()
+        var answer = $('#generic-modal input[name=question]:checked').val(),
+            container = $('#submitAnswer'),
+            city = container.data("city"),
+            action = container.data("action");
 
         $('#generic-modal .container').empty();
         if (answer === gameEngine.currentQuestion.correct_answer) {
-            $('#generic-modal .container').append("Correct")
+            $('#generic-modal .container').append("Correct");
+            if (action === 'treat') {
+                city.infection--;
+                city.outbreaked = false;
+            }
         } else {
             $('#generic-modal .container').append("Incorrect")
         }
 
-        $('#generic-modal .container').append('<div><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>')
+        $('#generic-modal .container').append('<div><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+        $('#generic-modal').on('hidden.bs.modal', function () {
+            gameEngine.nextTurn();
+        });
     },
 
     showResearchInformation: function() {
         $('#generic-modal .container').empty();
 
         randomIndex = Math.floor(Math.random() * gameEngine.researchInformation.length)
-        console.log(randomIndex)
         information = gameEngine.researchInformation[randomIndex]
         $('#generic-modal .container').append("<div style='width: 500px;'>"+ information + "</div>")
         $('#generic-modal .container').append('<div><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>')
-        $('#generic-modal').modal()
+        $('#generic-modal').on('hidden.bs.modal', function () {
+            gameEngine.nextTurn();
+        });
+        $('#generic-modal').modal();
 
-    },
-
-
-
-
-
+    }
 
 };
