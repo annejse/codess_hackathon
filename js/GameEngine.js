@@ -11,6 +11,7 @@ var gameEngine = {
     currentQuestion: null,
     nPlayers: 0,
     diseaseQuestions: null,
+    researchInformation: null,
 
     /**
      * Creates a new game
@@ -26,7 +27,11 @@ var gameEngine = {
             gameEngine.map.nCities = map.citiesList.length;
             $.getJSON("diseases/" + disease + ".json", function(data) {
                 gameEngine.diseaseQuestions = data.questions;
+                gameEngine.researchInformation = data.information
+
                 $('#treatCity').prop( "disabled", false );
+                $('#research').prop( "disabled", false );
+
                 worldmap.draw(map.initialZoom, map.initialPosition, function() {
                     $.each(map.cities, function (name, city) {
                         city.players = [];
@@ -36,7 +41,6 @@ var gameEngine = {
                     done();
                 });
             });
-
         });
         
 
@@ -153,6 +157,10 @@ var gameEngine = {
         gameEngine.askDiseaseQuestion()
     },
 
+    research: function() {
+        gameEngine.showResearchInformation()
+    },
+
     askDiseaseQuestion: function() {
         $('#generic-modal .container').empty();
 
@@ -186,6 +194,23 @@ var gameEngine = {
         }
 
         $('#generic-modal .container').append('<div><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>')
-    }
+    },
+
+    showResearchInformation: function() {
+        $('#generic-modal .container').empty();
+
+        randomIndex = Math.floor(Math.random() * gameEngine.researchInformation.length)
+        console.log(randomIndex)
+        information = gameEngine.researchInformation[randomIndex]
+        $('#generic-modal .container').append("<div style='width: 500px;'>"+ information + "</div>")
+        $('#generic-modal .container').append('<div><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>')
+        $('#generic-modal').modal()
+
+    },
+
+
+
+
+
 
 };

@@ -17,13 +17,20 @@ function start_game() {
     $("#move").on('click', function(e) {
         gameEngine.availableMoves();
     });    
-
+    $("#research").on('click', function(e) {
+       gameEngine.research();
+    });
+    
     gameEngine.create('south-europe', 'malaria', function() {
             gameEngine.addPlayer('John');
             gameEngine.addPlayer('Matti');
             gameEngine.addPlayer('Elaine');
             gameEngine.start();
     });
+
+
+
+
 }
 
 
