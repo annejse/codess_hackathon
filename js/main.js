@@ -1,17 +1,22 @@
 
 function setup_game() {
-	$('#setup-game').modal();
-	$('#setup-game .btn').click(request_players)
+	gameEngine.create("", "malaria");
+
+	// $('#setup-game').modal();
+	// $('#setup-game .btn').click(request_players);
+	setTimeout(start_game, 1000)
 }
 
 
 function start_game() {
-	console.log("starting game")
-	
     $("#endTurn").on('click', function(e) {
        gameEngine.nextTurn();
     });
-    gameEngine.start();
+	
+	gameEngine.addPlayer("player1");
+	gameEngine.addPlayer("player2");
+	
+	gameEngine.start();
 }
 
 

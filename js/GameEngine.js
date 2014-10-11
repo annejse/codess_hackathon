@@ -10,20 +10,7 @@ var gameEngine = {
     currentPlayer: null,
     currentQuestion: null,
     nPlayers: 0,
-    diseaseQuestions: [
-        {"question": "What part of the body is seriously affected by Malaria?", 
-            "answers": ["Spleen", "Liver", "Lungs", "Heart"],
-            "correct_answer": "Liver"},
-        {"question": "Malaria is caused by?",  
-            "answers": ["Virus", "Bacteria", "Parasite", "Mosquito"],
-            "correct_answer": "Parasite"},
-        {"question": "Which day is celebrated as World Malaria Day?",  
-            "answers": ["25 April", "25 June", "25 July", "16 Sept"],
-            "correct_answer" : "Africa"},
-        {"question": "In which continent, as per WHO, one in every five childhood death is due to malaria?",  
-            "answers": ["Africa", "South America", "North America", "Asia"],
-            "correct_answer": "25th April"}
-    ],
+    diseaseQuestions: null,
 
     /**
      * Creates a new game
@@ -34,6 +21,13 @@ var gameEngine = {
         this.disease = disease;
         this.currentPlayer = null;
         this.nPlayers = 0;
+
+        disease_json = "diseases/" + disease + ".json";
+        response = $.getJSON(disease_json, function(data) {
+            gameEngine.diseaseQuestions = data.questions;
+        });
+        
+        
     },
 
     /**
@@ -54,13 +48,12 @@ var gameEngine = {
      * Stars the game
      */
     start: function() {
-
-
         var startingPlayer = chance.integer({min: 0, max: this.nPlayers - 1}),
             gameEngine = this;
         if (this.players.length < 2) {
             throw new Error("At least 2 players are required to start a game");
         }
+        console.log("starting 2");
         this.$playerList = $(".player");
         this.setCurrentPlayer(this.players[startingPlayer]);
         //Set up the players names on the board
@@ -74,6 +67,8 @@ var gameEngine = {
             }
 
         });
+
+        gameEngine.runTurn();
     },
 
     setCurrentPlayer : function(player) {
@@ -87,43 +82,64 @@ var gameEngine = {
     nextTurn: function() {
         var nextPlayer = (this.currentPlayer.id + 1) % this.nPlayers;
         this.setCurrentPlayer(this.players[nextPlayer]);
+        this.runTurn();
     },
 
+    runTurn: function() {
+
+        modalContainer = $("#generic-modal .container");
+        modalContainer.empty();
+        
+        modalContainer.append("<h1>" + this.currentPlayer.name + "</h1>");
+
+        modalContainer.append("<h3>Do you want to?</h3>");
+        modalContainer.append("<div id='option-row' class='row'></div>");
+        $('#option-row').append("<div id='research_option' class='col-sm-1 btn btn-primary'>Research</div>");
+        $('#option-row').append("<div id='contain_option' class='col-sm-1 col-sm-offset-1 btn btn-primary'>Contain</div>");
+        $('#option-row').append("<div id='treat_option' class='col-sm-1 col-sm-offset-1 btn btn-primary'>Treat</div>");
+
+
+        $('#contain_option').click(this.containCity);
+        $("#generic-modal").modal();
+    },
+
+    containCity: function() {
+        gameEngine.askDiseaseQuestion()
+    },
 
     askDiseaseQuestion: function() {
+        $('#generic-modal .container').empty();
 
         randomIndex = Math.floor(Math.random() * this.diseaseQuestions.length)
         randomQuestion = this.diseaseQuestions[randomIndex]
         this.currentQuestion = randomQuestion
-        console.log(this.currentQuestion)
-        console.log(randomQuestion["question"])
 
-        $('#disease-question .container').append(randomQuestion["question"])
+        $('#generic-modal .container').append(randomQuestion.question)
         
 
-        for (i = 0; i < randomQuestion["answers"].length; i++) {
-            answer = randomQuestion["answers"][i]
-            $('#disease-question .container').append('<div><input type="radio" name="question" value="' + answer + '">' + answer + '</input></div>')
+        for (i = 0; i < randomQuestion.answers.length; i++) {
+            answer = randomQuestion.answers[i]
+            $('#generic-modal .container').append('<div><input type="radio" name="question" value="' + answer + '">' + answer + '</input></div>')
         }
 
-        $('#disease-question .container').append("<div id='submitAnswer' class='btn btn-primary'>Submit</div>")
+        $('#generic-modal .container').append("<div id='submitAnswer' class='btn btn-primary'>Submit</div>")
         $('#submitAnswer').click(this.submitAnswer);
         
 
-        $('#disease-question').modal()
+        $('#generic-modal').modal()
     },
 
     submitAnswer: function() {
-        answer = $('#disease-question input[name=question]:checked').val()
+        answer = $('#generic-modal input[name=question]:checked').val()
 
-        $('#disease-question .container').empty();
-        if (answer === gameEngine.currentQuestion["correct_answer"]) {
-            $('#disease-question .container').append("Correct")
+        $('#generic-modal .container').empty();
+        if (answer === gameEngine.currentQuestion.correct_answer) {
+            $('#generic-modal .container').append("Correct")
         } else {
-            $('#disease-question .container').append("Incorrect")
+            $('#generic-modal .container').append("Incorrect")
         }
 
-        $('#disease-question .container').append('<div><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>')
+        $('#generic-modal .container').append('<div><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>')
     }
 
 };

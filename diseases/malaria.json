@@ -1,0 +1,14 @@
+{"questions": [
+    {"question": "What part of the body is seriously affected by Malaria?", 
+        "answers": ["Spleen", "Liver", "Lungs", "Heart"],
+        "correct_answer": "Liver"},
+    {"question": "Malaria is caused by?",  
+        "answers": ["Virus", "Bacteria", "Parasite", "Mosquito"],
+        "correct_answer": "Parasite"},
+    {"question": "Which day is celebrated as World Malaria Day?",  
+        "answers": ["25 April", "25 June", "25 July", "16 Sept"],
+        "correct_answer" : "Africa"},
+    {"question": "In which continent, as per WHO, one in every five childhood death is due to malaria?",  
+        "answers": ["Africa", "South America", "North America", "Asia"],
+        "correct_answer": "25th April"}
+]}
