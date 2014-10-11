@@ -7,4 +7,12 @@ function start_game() {
 	}).appendTo('#main-container');
 
 	start_game_div.append("<div class='btn btn-primary'>Start Game</div>")
+
+    $("#endTurn").on('click', function(e) {
+       gameEngine.nextTurn();
+    });
+    gameEngine.addPlayer('John');
+    gameEngine.addPlayer('Matti');
+    gameEngine.addPlayer('Elaine');
+    gameEngine.start();
 }
