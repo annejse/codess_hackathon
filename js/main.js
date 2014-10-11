@@ -1,7 +1,5 @@
 
 function setup_game() {
-    gameEngine.create("", "malaria");
-
     // $('#setup-game').modal();
     // $('#setup-game .btn').click(request_players);
     start_game()
@@ -20,13 +18,11 @@ function start_game() {
         gameEngine.availableMoves();
     });    
 
-    $.getJSON('map/south-europe/map.json').done(function( map ) {
-        gameEngine.create(map, null, function() {
+    gameEngine.create('south-europe', 'malaria', function() {
             gameEngine.addPlayer('John');
             gameEngine.addPlayer('Matti');
             gameEngine.addPlayer('Elaine');
             gameEngine.start();
-        });
     });
 }
 

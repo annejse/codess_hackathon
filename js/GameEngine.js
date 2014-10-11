@@ -17,29 +17,30 @@ var gameEngine = {
      */
     create: function(map, disease, done) {
         this.players = [];
-        this.map = map;
-        this.map.citiesList = $.map(map.cities, function(city, name) {return city;});
-        this.map.nCities = map.citiesList.length;
-        this.disease = disease;
         this.currentPlayer = null;
         this.nPlayers = 0;
 
-        disease_json = "diseases/" + disease + ".json";
-        response = $.getJSON(disease_json, function(data) {
-            gameEngine.diseaseQuestions = data.questions;
-            $('#treatCity').prop( "disabled", false );
+        $.getJSON('map/' + map + '/map.json').done(function( map ) {
+            gameEngine.map = map;
+            gameEngine.map.citiesList = $.map(map.cities, function(city, name) {return city;});
+            gameEngine.map.nCities = map.citiesList.length;
+            $.getJSON("diseases/" + disease + ".json", function(data) {
+                gameEngine.diseaseQuestions = data.questions;
+                $('#treatCity').prop( "disabled", false );
+                worldmap.draw(map.initialZoom, map.initialPosition, function() {
+                    $.each(map.cities, function (name, city) {
+                        city.players = [];
+                    });
+                    gameEngine.drawConnections();
+                    gameEngine.drawCities();
+                    done();
+                });
+            });
+
         });
-        
         
 
-        worldmap.draw(map.initialZoom, map.initialPosition, function() {
-            $.each(map.cities, function (name, city) {
-                city.players = [];
-            });
-            gameEngine.drawConnections();
-            gameEngine.drawCities();
-            done();
-        });
+
     },
 
     /**
