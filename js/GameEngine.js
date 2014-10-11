@@ -18,6 +18,10 @@ var gameEngine = {
             gameEngine.infect(map.startingLevel);
             gameEngine.drawConnections();
             gameEngine.drawCities();
+            for (var i = 0; i < gameEngine.nPlayers; i++) {
+                var player = gameEngine.players[i];
+                gameEngine.movePlayer(player, null, player.city);
+            }
             done();
         });
     },
@@ -110,17 +114,28 @@ var gameEngine = {
     },
 
     movePlayer: function(player, src, dest) {
+        var offset = -1;
         if (src !== null) {
-            for (var i = 0; i < src.players.length; src++) {
+            for (var i = 0; i < src.players.length; i++) {
                 if (src.players[i].id === player.id) {
                     src.players[i] = undefined;
                     break;
                 }
             }
         }
-        worldmap.drawPlayer(dest.coordinates, player.name, dest.players.length);
         player.city = dest;
-        dest.players.push(player);
+        for (var i = 0; i < dest.players.length; i++) {
+            if (dest.players[i].id === player.id) {
+                offset = i;
+                break;
+            }
+        }
+        if (offset === -1) {
+            offset = dest.players.length;
+            dest.players.push(player);
+        }
+        worldmap.drawPlayer(dest.coordinates, player.name, offset);
+
     },
 
     availableMoves: function(player) {
