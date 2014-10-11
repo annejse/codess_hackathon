@@ -8,7 +8,9 @@ var gameEngine = {
     map: null,
     disease: null,
     currentPlayer: null,
+    currentQuestion: null,
     nPlayers: 0,
+    diseaseQuestions: null,
 
     /**
      * Creates a new game
@@ -21,6 +23,14 @@ var gameEngine = {
         this.disease = disease;
         this.currentPlayer = null;
         this.nPlayers = 0;
+
+        disease_json = "diseases/" + disease + ".json";
+        response = $.getJSON(disease_json, function(data) {
+            gameEngine.diseaseQuestions = data.questions;
+            $('#treatCity').prop( "disabled", false );
+        });
+        
+        
 
         worldmap.draw(map.initialZoom, map.initialPosition, function() {
             $.each(map.cities, function (name, city) {
@@ -48,12 +58,9 @@ var gameEngine = {
 
 
     /**
-     *
      * Stars the game
      */
     start: function() {
-
-
         var startingPlayer = chance.integer({min: 0, max: this.nPlayers - 1}),
             gameEngine = this;
         if (this.players.length < 2) {
@@ -137,5 +144,47 @@ var gameEngine = {
     nextTurn: function() {
         var nextPlayer = (this.currentPlayer.id + 1) % this.nPlayers;
         this.setCurrentPlayer(this.players[nextPlayer]);
+        
+    },
+
+
+    treatCity: function() {
+        gameEngine.askDiseaseQuestion()
+    },
+
+    askDiseaseQuestion: function() {
+        $('#generic-modal .container').empty();
+
+        randomIndex = Math.floor(Math.random() * this.diseaseQuestions.length)
+        randomQuestion = this.diseaseQuestions[randomIndex]
+        this.currentQuestion = randomQuestion
+
+        $('#generic-modal .container').append(randomQuestion.question)
+        
+
+        for (i = 0; i < randomQuestion.answers.length; i++) {
+            answer = randomQuestion.answers[i]
+            $('#generic-modal .container').append('<div><input type="radio" name="question" value="' + answer + '">' + answer + '</input></div>')
+        }
+
+        $('#generic-modal .container').append("<div id='submitAnswer' class='btn btn-primary'>Submit</div>")
+        $('#submitAnswer').click(this.submitAnswer);
+        
+
+        $('#generic-modal').modal()
+    },
+
+    submitAnswer: function() {
+        answer = $('#generic-modal input[name=question]:checked').val()
+
+        $('#generic-modal .container').empty();
+        if (answer === gameEngine.currentQuestion.correct_answer) {
+            $('#generic-modal .container').append("Correct")
+        } else {
+            $('#generic-modal .container').append("Incorrect")
+        }
+
+        $('#generic-modal .container').append('<div><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>')
     }
+
 };

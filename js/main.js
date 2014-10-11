@@ -1,20 +1,25 @@
 
+function setup_game() {
+    gameEngine.create("", "malaria");
+
+    // $('#setup-game').modal();
+    // $('#setup-game .btn').click(request_players);
+    start_game()
+}
+
+
 function start_game() {
-
-	$('#start-game').remove()
-
-	start_game_div = jQuery('<div/>', {
-	    id: 'start-game'
-	}).appendTo('#main-container');
-
-	start_game_div.append("<div class='btn btn-primary'>Start Game</div>")
-
     $("#endTurn").on('click', function(e) {
-       gameEngine.nextTurn();
+        gameEngine.nextTurn();
+    });
+
+    $("#treatCity").on('click', function(e) {
+        gameEngine.treatCity();
     });
     $("#move").on('click', function(e) {
         gameEngine.availableMoves();
-    });
+    });    
+
     $.getJSON('map/south-europe/map.json').done(function( map ) {
         gameEngine.create(map, null, function() {
             gameEngine.addPlayer('John');
@@ -23,5 +28,27 @@ function start_game() {
             gameEngine.start();
         });
     });
-
 }
+
+
+function request_players() {
+    $('#setup-game').modal('hide');
+
+    $('#request-players').modal();
+    $('#request-players #add-player').click(add_player);
+    $('#request-players #done-adding-players').click(done_adding_players);
+}
+
+function add_player() {
+
+    player_name = $('#player-name').val();
+    $('#player-name').val('');
+    gameEngine.addPlayer(player_name);
+    $('#player-list').append("<div>" + player_name + "</div>")
+}
+
+function done_adding_players(){
+    $('#request-players').modal('hide');
+    start_game()
+}
+

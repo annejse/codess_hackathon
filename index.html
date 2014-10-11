@@ -43,6 +43,7 @@
             </div>
             <div class="row text-center">
                 <button class="btn btn-primary" id="move">Move</button>
+                <button class="btn btn-primary" id="treatCity" class="turn-option" disabled="disabled">Treat</button>
                 <button class="btn btn-primary" id="endTurn">End Turn</button>
             </div>
         </div>
@@ -56,6 +57,70 @@
         <script src="js/vendor/raphael.pan-zoom.min.js"></script>
         <script src="js/world.js"></script>
         
+		
+
+        <div id="setup-game" class="modal fade">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		        <div class="btn btn-primary">Start Game</div>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+
+		<div id="request-players" class="modal fade">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		      	<div class="container">
+			      	<div id="player-list"></div>
+			      	<div class="row">
+						<input type="text" id="player-name" class="col-sm-3"></input>
+				    </div>
+				    <div class="row">
+				    	<div class="btn btn-primary" id="add-player" class="col-sm-1">Add</div>
+			        	<div class="btn btn-default" id="done-adding-players" class="col-sm-1">Done</div>
+			        </div>
+			    </div>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+
+		<div id="disease-question" class="modal fade">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		      	<div class="container">
+
+			    </div>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+
+		<div id="generic-modal" class="modal fade">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		      	<div class="container">
+
+			    </div>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+
+
+		<script>
+			setup_game();
+        </script>
+
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
             (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
@@ -65,7 +130,9 @@
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
             ga('create','UA-XXXXX-X');ga('send','pageview');
 
-            start_game();
         </script>
+
+
+
     </body>
 </html>
