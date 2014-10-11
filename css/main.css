@@ -302,3 +302,7 @@ textarea {
         page-break-after: avoid;
     }
 }
+
+#board {
+    min-height: 450px;
+}

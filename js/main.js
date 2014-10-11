@@ -1,5 +1,6 @@
 
 function start_game() {
+
 	$('#start-game').remove()
 
 	start_game_div = jQuery('<div/>', {
@@ -11,8 +12,16 @@ function start_game() {
     $("#endTurn").on('click', function(e) {
        gameEngine.nextTurn();
     });
-    gameEngine.addPlayer('John');
-    gameEngine.addPlayer('Matti');
-    gameEngine.addPlayer('Elaine');
-    gameEngine.start();
+    $("#move").on('click', function(e) {
+        gameEngine.availableMoves();
+    });
+    $.getJSON('map/south-europe/map.json').done(function( map ) {
+        gameEngine.create(map, null, function() {
+            gameEngine.addPlayer('John');
+            gameEngine.addPlayer('Matti');
+            gameEngine.addPlayer('Elaine');
+            gameEngine.start();
+        });
+    });
+
 }

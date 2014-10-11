@@ -1,0 +1,37 @@
+{
+    "name": "South Europe",
+    "initialZoom": 9,
+    "initialPosition": { "x":420, "y": 90},
+    "cities": {
+        "Madrid": {
+            "name": "Madrid",
+            "population": 4000000,
+            "coordinates": "40° 24' 59\" N  3° 42' 09\" W",
+            "connections": ["Lisbon", "Barcelona", "Bilbao", "Valencia"]
+        },
+        "Lisbon": {
+            "name": "Lisbon",
+            "population": 2000000,
+            "coordinates": "38° 43' 59\" N  9° 7' 59\" W",
+            "connections": ["Madrid"]
+        },
+        "Barcelona": {
+            "name": "Barcelona",
+            "population": 150000,
+            "coordinates": "41° 23' 19\" N  2° 09' 32\" E",
+            "connections": ["Bilbao", "Madrid", "Valencia"]
+        },
+        "Valencia": {
+            "name": "Valencia",
+            "population": 80000,
+            "coordinates": "39° 28' 11\" N  0° 22' 38\" E",
+            "connections": ["Madrid", "Barcelona"]
+        },
+        "Bilbao": {
+            "name": "Bilbao",
+            "population": 800000,
+            "coordinates": "43° 15' 25\" N  2° 55' 25\" W",
+            "connections": ["Madrid", "Barcelona"]
+        }
+    }
+}
