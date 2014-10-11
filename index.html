@@ -53,7 +53,7 @@
         <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         
 
-        <div id="start-game" class="modal fade">
+        <div id="setup-game" class="modal fade">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-body">
@@ -75,13 +75,17 @@
 				    </div>
 				    <div class="row">
 				    	<div class="btn btn-primary" id="add-player" class="col-sm-1">Add</div>
-			        	<div class="btn btn-default" id="done" class="col-sm-1">Done</div>
+			        	<div class="btn btn-default" id="done-adding-players" class="col-sm-1">Done</div>
 			        </div>
 			    </div>
 		      </div>
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
+
+		<script>
+			setup_game();
+        </script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
@@ -92,8 +96,6 @@
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
             ga('create','UA-XXXXX-X');ga('send','pageview');
 
-            var game = new Object();
-            start_game();
         </script>
 
 

@@ -6,32 +6,33 @@ function setup_game() {
 
 
 function start_game() {
-	start_game_div.append("<div class='btn btn-primary'>Start Game</div>")
-
+	console.log("starting game")
+	
     $("#endTurn").on('click', function(e) {
        gameEngine.nextTurn();
     });
-    gameEngine.addPlayer('John');
-    gameEngine.addPlayer('Matti');
-    gameEngine.addPlayer('Elaine');
     gameEngine.start();
 }
 
 
 function request_players() {
-	$('#start-game').modal('hide');
+	$('#setup-game').modal('hide');
 
-	game["players"] = []
 	$('#request-players').modal();
-
-	$('#request-players #add-player').click(add_player)
+	$('#request-players #add-player').click(add_player);
+	$('#request-players #done-adding-players').click(done_adding_players);
 }
 
 function add_player() {
-	game["players"].push("added")
-	$('#player-list').append("added")
 
-	
+	player_name = $('#player-name').val();
+	$('#player-name').val('');
+	gameEngine.addPlayer(player_name);
+	$('#player-list').append("<div>" + player_name + "</div>")
 }
 
->>>>>>> Stashed changes
+function done_adding_players(){
+	$('#request-players').modal('hide');
+	start_game()
+}
+
