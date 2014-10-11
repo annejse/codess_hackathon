@@ -25,6 +25,7 @@ var gameEngine = {
         disease_json = "diseases/" + disease + ".json";
         response = $.getJSON(disease_json, function(data) {
             gameEngine.diseaseQuestions = data.questions;
+            $('#treatCity').prop( "disabled", false );
         });
         
         
@@ -67,8 +68,6 @@ var gameEngine = {
             }
 
         });
-
-        gameEngine.runTurn();
     },
 
     setCurrentPlayer : function(player) {
@@ -82,28 +81,11 @@ var gameEngine = {
     nextTurn: function() {
         var nextPlayer = (this.currentPlayer.id + 1) % this.nPlayers;
         this.setCurrentPlayer(this.players[nextPlayer]);
-        this.runTurn();
-    },
-
-    runTurn: function() {
-
-        modalContainer = $("#generic-modal .container");
-        modalContainer.empty();
         
-        modalContainer.append("<h1>" + this.currentPlayer.name + "</h1>");
-
-        modalContainer.append("<h3>Do you want to?</h3>");
-        modalContainer.append("<div id='option-row' class='row'></div>");
-        $('#option-row').append("<div id='research_option' class='col-sm-1 btn btn-primary'>Research</div>");
-        $('#option-row').append("<div id='contain_option' class='col-sm-1 col-sm-offset-1 btn btn-primary'>Contain</div>");
-        $('#option-row').append("<div id='treat_option' class='col-sm-1 col-sm-offset-1 btn btn-primary'>Treat</div>");
-
-
-        $('#contain_option').click(this.containCity);
-        $("#generic-modal").modal();
     },
 
-    containCity: function() {
+
+    treatCity: function() {
         gameEngine.askDiseaseQuestion()
     },
 

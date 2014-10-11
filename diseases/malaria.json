@@ -1,14 +1,28 @@
-{"questions": [
-    {"question": "What part of the body is seriously affected by Malaria?", 
-        "answers": ["Spleen", "Liver", "Lungs", "Heart"],
-        "correct_answer": "Liver"},
-    {"question": "Malaria is caused by?",  
-        "answers": ["Virus", "Bacteria", "Parasite", "Mosquito"],
-        "correct_answer": "Parasite"},
-    {"question": "Which day is celebrated as World Malaria Day?",  
-        "answers": ["25 April", "25 June", "25 July", "16 Sept"],
-        "correct_answer" : "Africa"},
-    {"question": "In which continent, as per WHO, one in every five childhood death is due to malaria?",  
-        "answers": ["Africa", "South America", "North America", "Asia"],
-        "correct_answer": "25th April"}
-]}
+{
+    "questions": [
+        {"question": "What part of the body is seriously affected by Malaria?", 
+            "answers": ["Spleen", "Liver", "Lungs", "Heart"],
+            "correct_answer": "Liver"},
+        {"question": "Malaria is caused by?",  
+            "answers": ["Virus", "Bacteria", "Parasite", "Mosquito"],
+            "correct_answer": "Parasite"},
+        {"question": "Which is most common type of Malaria and also most deadly?",  
+            "answers": ["P. malariae", "P. ovale", "P. falciparum", "P. viva"],
+            "correct_answer": "P. falciparum"},
+        {"question": "How many types of Malaria infects humans?",
+            "answers": ["One", "Two", "Three", "Four", "Five"],
+            "correct_answer": "Five"}
+    ],
+
+    "information": [
+        "Malaria is caused by a parasite called Plasmodium, which is transmitted via the bites of infected mosquitoes.",
+        "Most common symptom of Malaria is Liver damage and anemia, it also causes headache, fever, jaundice, Nausea and sweating",
+        "Symptoms of malaria include fever, headache, and vomiting, and usually appear between 10 and 15 days after the mosquito bite.",
+        "There are four types of common malaria parasites. Recently, a fifth type, Plasmodium knowlesi, has been causing malaria in Malaysia and areas of southeast Asia."
+    ]
+}
+
+
+
+
+

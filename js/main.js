@@ -4,7 +4,7 @@ function setup_game() {
 
 	// $('#setup-game').modal();
 	// $('#setup-game .btn').click(request_players);
-	setTimeout(start_game, 1000)
+	start_game()	
 }
 
 
@@ -12,6 +12,12 @@ function start_game() {
     $("#endTurn").on('click', function(e) {
        gameEngine.nextTurn();
     });
+
+    $("#treatCity").on('click', function(e) {
+       gameEngine.treatCity();
+    });
+
+    
 	
 	gameEngine.addPlayer("player1");
 	gameEngine.addPlayer("player2");
